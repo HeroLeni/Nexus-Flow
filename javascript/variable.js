@@ -1,11 +1,11 @@
 // 1. DEFINICIÓN (La "Base de Datos")
-let work = []; 
+let work = [];
 
 const taskForm = document.getElementById('task-form');
 const taskList = document.getElementById('task-list');
 
 // --- CREATE (Añadir con validación de duplicados) ---
-taskForm.addEventListener('submit', function(e){
+taskForm.addEventListener('submit', function (e) {
     e.preventDefault();
 
     const name = document.getElementById('task-name').value;
@@ -32,21 +32,21 @@ taskForm.addEventListener('submit', function(e){
     }
 
     // Generamos un ID único
-    const newId = Date.now(); 
+    const newId = Date.now();
 
     // Creamos el objeto
-    const task = { 
-        id: newId, 
-        name: name, 
+    const task = {
+        id: newId,
+        name: name,
         date: date,
-        description:description,
+        description: description,
         priority: priority,
-        completada: false 
+        completada: false
     };
 
     // Guardamos en el Array "work"
-    work.push(task); 
-    
+    work.push(task);
+
     // Y también lo mostramos en el DOM
     addTaskToDOM(task);
 
@@ -57,7 +57,7 @@ taskForm.addEventListener('submit', function(e){
 
 function addTaskToDOM(task) {
     const li = document.createElement('li');
-    li.setAttribute('data-id', task.id); 
+    li.setAttribute('data-id', task.id);
 
     li.innerHTML = `
         <span style="cursor:pointer;" title="${task.description}" id="task-text-${task.id}"><strong>${task.name}</strong></span>
@@ -74,79 +74,58 @@ function addTaskToDOM(task) {
     `;
     // Evento click para eliminar la task
     li.querySelector(".delete-btn").addEventListener("click", () => {
+        const confirmar = confirm("¿Estás seguro de eliminar esta tarea?");
+        if (!confirmar) return;
+
+        // 1. Eliminar del array 'work'
+        work = work.filter(t => t.id !== task.id);
+
+        // 2. Eliminar del DOM
         li.remove();
+
+        // Log para debug
+        console.log(`Tarea "${task.name}" eliminada. Tareas restantes:`, work);
     });
     taskList.appendChild(li);
 }
 
-// --- MODIFY (Modificar - nueva función) ---
+//UPDATE (MODIFICAR TAREA EXISTENTE)
 function modificarTarea(idParaModificar) {
-    // 1. Buscar la tarea actual
+    // Buscamos la tarea en el array por su ID
     const tarea = work.find(t => t.id === idParaModificar);
     
+    // Si no existe, salimos de la función
     if (!tarea) return;
 
-    // --- PASO A: Modificar Nombre ---
+    // Solicitamos el nuevo nombre al usuario
     const nuevoNombre = prompt("📝 Editar nombre de la tarea:", tarea.name);
     
-    // Validación simple: Si cancela o lo deja vacío, no hacemos nada
+    // Validación: Si cancela o deja el campo vacío, no hacemos nada
     if (nuevoNombre === null || nuevoNombre.trim() === "") return;
 
-    // --- PASO D: Actualizar DOM (Visual) ---
-    const spanTexto = document.getElementById(`task-text-${idParaModificar}`);
-    
-    // 1. Cambiamos el texto
-    spanTexto.innerHTML = `<strong>${nuevoNombre.trim()}</strong>`;
-}
-
-taskList.addEventListener("click", (e) => {
-    const li = e.target.closest("li");
-    if (!li) return;
-
-    const id = Number(li.dataset.id);
-
-    // ✔ Completar
-    if (e.target.closest(".complete")) {
-        completarTarea(id, li);
-    }    
-
-});
-
-function completarTarea(id, li) {
-    const spanTexto = li.querySelector(".task-text");
-    if (!spanTexto) return;
-
-    const estaCompletada = confirm(
-        `¿La tarea está FINALIZADA?\n\nAceptar = ✅\nCancelar = ⏳`
-    );
-
-    // Actualizar array
-    work = work.map(t =>
-        t.id === id ? { ...t, completada: estaCompletada } : t
-    );
-
-    // Cambiar UI
-    spanTexto.classList.toggle("tarea-completada", estaCompletada);
-
-    
-}
-
-// --- DELETE (Eliminar) ---
-function eliminarTarea(idParaBorrar, botonElemento) {
-    // Confirmación antes de borrar
-    const confirmar = confirm("¿Estás seguro de eliminar esta tarea?");
-    
-    if (!confirmar) {
-        return;
+    // Validación: Verificar que el nuevo nombre no esté duplicado
+    // (solo si es diferente al nombre actual)
+    if (nuevoNombre.trim().toLowerCase() !== tarea.name.toLowerCase()) {
+        const nombreDuplicado = work.find(t => 
+            t.name.toLowerCase() === nuevoNombre.trim().toLowerCase()
+        );
+        
+        if (nombreDuplicado) {
+            alert(`⚠️ Ya existe una tarea con el nombre "${nuevoNombre}". Por favor elige otro nombre.`);
+            return;
+        }
     }
 
-    // 1. Borrar del Array (Lógica)
-    work = work.filter(task => task.id !== idParaBorrar);
+    // Actualizamos el nombre en el array
+    tarea.name = nuevoNombre.trim();
+
+    // Actualizamos el DOM (visual)
+    const spanTexto = document.getElementById(`task-text-${idParaModificar}`);
+    if (spanTexto) {
+        spanTexto.innerHTML = `<strong>${nuevoNombre.trim()}</strong>`;
+    }
     
-    // 2. Borrar del DOM (Visual)
-    botonElemento.parentElement.remove();
-    
-    console.log("Elemento eliminado. Quedan:", work);
+    console.log("Tarea modificada:", tarea);
 }
 
 // --- READ (Buscar) - Función de ejemplo ---
