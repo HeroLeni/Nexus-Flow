@@ -51,8 +51,9 @@ function addTaskToDOM(task) {
         <span id="task-text-${task.id}"><strong>${task.name}</strong></span>
         <span>Fecha: ${task.date}</span>
         <span class="badge ${task.priority.toLowerCase()}">${task.priority}</span>
-        <button onclick="modificarTarea(${task.id})">Modificar</button>
-        <button onclick="eliminarTarea(${task.id}, this)">Eliminar</button>
+        <button type="button" class="action-btn compelte"><i class="fa-solid fa-check"></i></button>
+        <button onclick="eliminarTarea(${task.id})", this><i class="fa-solid fa-trash"></i></button>
+        <button onclick="modificarTarea(${task.id})", this><i class="fa-regular fa-pen-to-square"></i></i></button>
     `;
 
     taskList.appendChild(li);
@@ -71,44 +72,44 @@ function modificarTarea(idParaModificar) {
     // Validación simple: Si cancela o lo deja vacío, no hacemos nada
     if (nuevoNombre === null || nuevoNombre.trim() === "") return;
 
-    // (Opcional) Aquí iría tu validación de duplicados que hicimos antes
-
-    // --- PASO B: Modificar Estado (Completado) ---
-    // confirm() devuelve: TRUE si das Aceptar, FALSE si das Cancelar
-    const estaCompletada = confirm(
-        `¿La tarea "${nuevoNombre}" está FINALIZADA?\n\n` +
-        `[Aceptar] = ✅ Sí, está lista\n` +
-        `[Cancelar] = ⏳ No, sigue pendiente`
-    );
-
-    // --- PASO C: Actualizar Array (Lógica) ---
-    work = work.map(t => {
-        if (t.id === idParaModificar) {
-            return { 
-                ...t, 
-                name: nuevoNombre.trim(), 
-                completada: estaCompletada // Guardamos el true/false
-            };
-        }
-        return t;
-    });
-
     // --- PASO D: Actualizar DOM (Visual) ---
     const spanTexto = document.getElementById(`task-text-${idParaModificar}`);
     
     // 1. Cambiamos el texto
     spanTexto.innerHTML = `<strong>${nuevoNombre.trim()}</strong>`;
-
-    // 2. Cambiamos el estilo según si está completada o no
-    if (estaCompletada) {
-        spanTexto.classList.add('tarea-completada'); // Agrega el tachado
-    } else {
-        spanTexto.classList.remove('tarea-completada'); // Quita el tachado
-    }
-
-    console.log("Tarea actualizada:", work);
 }
 
+taskList.addEventListener("click", (e) => {
+    const li = e.target.closest("li");
+    if (!li) return;
+
+    const id = Number(li.dataset.id);
+
+    // ✔ Completar
+    if (e.target.closest(".complete")) {
+        completarTarea(id, li);
+    }    
+
+});
+
+function completarTarea(id, li) {
+    const spanTexto = li.querySelector(".task-text");
+    if (!spanTexto) return;
+
+    const estaCompletada = confirm(
+        `¿La tarea está FINALIZADA?\n\nAceptar = ✅\nCancelar = ⏳`
+    );
+
+    // Actualizar array
+    work = work.map(t =>
+        t.id === id ? { ...t, completada: estaCompletada } : t
+    );
+
+    // Cambiar UI
+    spanTexto.classList.toggle("tarea-completada", estaCompletada);
+
+    
+}
 
 // --- DELETE (Eliminar) ---
 function eliminarTarea(idParaBorrar, botonElemento) {
