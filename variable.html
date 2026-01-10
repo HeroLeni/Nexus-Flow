@@ -19,25 +19,25 @@
             <div class="bg-white p-2 rounded shadow-sm me-3">
                 <i class="fas fa-check-double text-primary fa-lg"></i>
             </div>
-            <h2 class="m-0 fw-bold" style="color: #2b3445;">Mis Tareas</h2>
+            <h2 class="m-0 fw-bold" style="color: #e8eaed;">Mis Tareas</h2>
         </div>
 
         <!-- Formulario (Estilo Tarjeta) -->
         <div class="task-card mb-4">
             <form id="task-form" class="row g-3 align-items-end">
                 <div class="col-md-6">
-                    <label class="form-label text-muted small fw-bold">NOMBRE DE LA TAREA</label>
+                    <label class="form-label small fw-bold">NOMBRE DE LA TAREA</label>
                     <input type="text" maxlength="30" id="task-name" class="form-control"
                         placeholder="Ej. Revisar diseño de base de datos" required>
                 </div>
 
                 <div class="col-md-3">
-                    <label class="form-label text-muted small fw-bold">FECHA LÍMITE</label>
+                    <label class="form-label small fw-bold">FECHA LÍMITE</label>
                     <input type="date" id="task-date" class="form-control" required>
                 </div>
 
                 <div class="col-md-3">
-                    <label class="form-label text-muted small fw-bold">PRIORIDAD</label>
+                    <label class="form-label small fw-bold">PRIORIDAD</label>
                     <select id="task-priority" class="form-select">
                         <option value="Baja">🟢 Baja</option>
                         <option value="Media">🟠 Media</option>
@@ -46,7 +46,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label text-muted small fw-bold">Descripción</label>
+                    <label class="form-label small fw-bold">Descripción</label>
                     <textarea id="task-description" class="form-control" rows="3" required></textarea>
                 </div>
 
@@ -60,7 +60,7 @@
 
         <!-- Lista de Tareas -->
         <div class="task-card p-0" style="border:none; background:transparent; box-shadow:none;">
-            <h6 class="text-muted text-uppercase small fw-bold mb-3 ps-2">Lista de Pendientes</h6>
+            <h6 class="text-uppercase small fw-bold mb-3 ps-2">Lista de Pendientes</h6>
             <ul id="task-list">
                 <!-- Aquí se insertarán los <li> con JS -->
             </ul>

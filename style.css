@@ -1,15 +1,36 @@
 :root {
-            --clickup-bg: #f8f9fa; /* Fondo gris muy suave */
-            --clickup-purple: #7b68ee; /* Color acento tipo ClickUp */
-            --clickup-text: #292d34;
+        --bg-main: #1f1f1f;
+        --bg-card: #2b2b2b;
+        --bg-item: #303134;
+        --bg-hover: #3c4043;
+
+        --text-main: #e8eaed;
+        --text-muted: #9aa0a6;
+
+        --accent: #8ab4f8;
+
         }
 
         body {
-            background-color: var(--clickup-bg);
-            color: var(--clickup-text);
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: 'Roboto', sans-serif;
         }
 
+        h2, h5, h6 {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+        
+        .form-label {
+            color: #bdc1c6; /* gris claro tipo Google */
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+        }
+
+        
         .main-container {
             max-width: 800px;
             margin-top: 50px;
@@ -17,38 +38,65 @@
 
         /* Estilo del Formulario (Tarjeta Flotante) */
         .task-card {
-            background: white;
+            background: var(--bg-card);
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* Sombra suave ClickUp */
+            box-shadow: none;
             padding: 25px;
-            border: 1px solid #eaeaea;
+            border: none;
         }
 
-        .form-control, .form-select {
+        .form-control, 
+        .form-select {
+            background-color: var(--bg-item);
+            color: var(--text-main);
             border-radius: 8px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid var(--bg-hover);
             padding: 10px 15px;
             font-size: 0.95rem;
         }
 
-        .form-control:focus {
-            border-color: var(--clickup-purple);
-            box-shadow: 0 0 0 3px rgba(123, 104, 238, 0.1);
+        .form-control:focus,
+        .form-select:focus {
+            background-color: var(--bg-item);
+            color: var(--text-main);
+        }
+
+        .form-control, 
+        .form-select, 
+        textarea {
+            color: var(--text-main);
+            font-weight: 400;
+
+        }
+
+        #task-list li span,
+        #task-list li p {
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        .form-control::placeholder {
+            color: var(--text-muted)
+        }
+
+        .form-control:focus, 
+        .form-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(138, 180, 248, 0.25);
         }
 
         .btn-add {
-            background-color: var(--clickup-purple);
-            color: white;
-            border-radius: 8px;
+            background-color: var(--accent);
+            color: #202124;
+            border-radius: 20px;
             padding: 10px 20px;
-            font-weight: 600;
+            font-weight: 500;
             border: none;
-            transition: all 0.2s;
+            transition: background-color 0.2s ease;
         }
 
         .btn-add:hover {
             background-color: #6c5ce7;
-            transform: translateY(-1px);
         }
 
         /* Estilo de la Lista de Tareas */
@@ -59,63 +107,93 @@
         }
 
         #task-list li {
-            background: white;
-            border: 1px solid #eee;
-            border-left: 4px solid var(--clickup-purple); /* Borde lateral de color */
-            margin-bottom: 10px;
-            padding: 15px;
+            background: var(--bg-item);
+            border: none;
+            margin-bottom: 8px;
+            padding: 14px 16px;
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform-color 0.2s ease;
         }
 
         #task-list li:hover {
-            transform: translateX(2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            background-color: var(--bg-hover);
         }
+
+        /*checkbox estilo google*/
+
+        #task-list input[type="checkbox"] {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid var (--text-muted);
+            cursor: pointer;
+            margin-right: 12px;
+        }
+
+        #task-list input[type="checkbox"]:checked {
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        #task-list span,
+        #task-list p {
+            font-size:14px;
+            color: var(--text-main);
+        }
+
 
         /* Badges de Prioridad */
         .badge {
-            font-size: 0.75rem;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: 600;
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 500;
         }
-        .badge.baja { background-color: #e6f7ff; color: #0091ff; }
-        .badge.media { background-color: #fff7e6; color: #fa8c16; }
-        .badge.alta { background-color: #fff1f0; color: #f5222d; }
+        .badge.baja { 
+            background-color: rgba(138, 180, 248, 0.15);
+            color: var(--accent); 
+        }
+        .badge.media { 
+            background-color: rgba(251, 188, 5, 0.15);
+            color: #fbbc05;
+        }
+        .badge.alta { 
+            background-color: rgba(234, 67, 53, 0.15);
+            color: #ea4335;
+        }
 
         /* Botones de acción pequeños */
         .action-btn {
             background: none;
             border: none;
-            color: #b0b0b0;
+            color: var(--text-muted);
             cursor: pointer;
             padding: 5px;
             margin-left: 5px;
             font-size: 1.1rem;
-            transition: color 0.2s;
+            transition: color 0.2s ease;
         }
         
-        .action-btn:hover { color: var(--clickup-text); }
-        .action-btn.delete:hover { color: #ff4d4f; }
-
-        /* Tarea Completada */
-        .tarea-completada {
-            text-decoration: line-through;
-            color: #999;
-            opacity: 0.7;
+        .action-btn:hover { 
+            color: var(--text-main);
+        }
+        .action-btn.delete:hover { 
+            color: #ea4335; 
         }
 
+        /* Tarea Completada */
+        .tarea-completada,
         .idParaModificar {
             text-decoration: line-through;
-            color: #999;
-            opacity: 0.7;
+            color: var(--text-muted);
+            opacity: 0.8;
         }
         
         /* Ocultar el input original de fecha para estilo, opcional */
         input[type="date"] {
-            color: #666;
+            color: var(--text-muted);
         }
